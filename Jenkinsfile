@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        nodejs 'node-14' // Adjust version number as per your Node.js setup
+        nodejs 'node' // Adjust version number as per your Node.js setup
     }
     environment {
         SCANNER_HOME = tool 'scanner'
