@@ -4,12 +4,12 @@ pipeline {
         nodejs 'node-14' // Adjust version number as per your Node.js setup
     }
     environment {
-        SCANNER_HOME = tool 'sonar-scanner'
+        SCANNER_HOME = tool 'scanner'
     }
     stages {
         stage('Git Checkout') {
             steps {
-                git credentialsId: 'git-cred', url: 'https://github.com/jaiswaladi246/DevOps-Shack-3Tier.git'
+                git credentialsId: 'git-cred', url: 'https://github.com/FortressTechnologiesInc/3-Tier-Full-Stack.git'
             }
         }
         stage('Install Package Dependencies') {
@@ -37,22 +37,21 @@ pipeline {
         stage('Docker Build & Tag') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker build -t adijaiswal/campa:latest ."
-                    }
-                }
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+                        sh "docker build -t limkel/campa:2.0  ."
+                    }                }
             }
         }
         stage('Trivy Image Scan') {
             steps {
-                sh "trivy image --format table -o fs-report.html adijaiswal/campa:latest"
+                sh "trivy image --format table -o fs-report.html limkel/campa:2.0"
             }
         }
         stage('Docker Push Image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push adijaiswal/campa:latest"
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+                        sh "docker push limkel/campa:2.0"
                     }
                 }
             }
